@@ -20,7 +20,7 @@ const Main = props => {
                     id: book.id,
                     title: book.title,
                     author: book.authors[0],
-                    url: book.imageLinks.thumbnail
+                    url: book.imageLinks.smallThumbnail
                 }))
             }));
             setbooksShelfList(sortedBooks);

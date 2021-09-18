@@ -1,3 +1,4 @@
+import './BookOptionsMenu.css';
 
 const BookOptionsMenu = props => {
     return (<div className="book-shelf-changer">
