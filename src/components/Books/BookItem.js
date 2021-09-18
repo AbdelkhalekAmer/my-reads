@@ -1,5 +1,5 @@
+import './BookItem.css';
 import BookOptionsMenu from '../UI/BookOptionsMenu';
-import './App.css';
 
 const BookItem = props => {
     const book = props.book;
