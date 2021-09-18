@@ -1,6 +1,17 @@
 import './BookItem.css';
 import BookOptionsMenu from '../UI/BookOptionsMenu';
 
+/**
+ * @param {{
+ *          book:{
+ *             id:number,
+ *             title:string,
+ *             author:string,
+ *             url:string
+ *          }
+ *        }} props 
+ * @returns {JSX.Element}
+ */
 const BookItem = props => {
     const book = props.book;
     return (
