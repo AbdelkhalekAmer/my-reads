@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './Main.css';
 import BookShelfList from '../components/Categories/BookShelfList';
 import * as BooksApiService from '../services/BooksApiService';
+import { Link } from 'react-router-dom';
 
 const Main = () => {
     const [booksShelfList, setbooksShelfList] = useState([]);
@@ -63,7 +64,7 @@ const Main = () => {
         </div>
         {loading ? <p>Loading...</p> : <BookShelfList list={booksShelfList} updateBookShelf={updateBookShelf} />}
         <div className="open-search">
-            <button>Add a book</button>
+            <Link to="/search"><button>Add a book</button></Link>
         </div>
     </div>);
 };

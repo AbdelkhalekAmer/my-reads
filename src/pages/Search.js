@@ -2,6 +2,7 @@ import './Search.css';
 import BookList from '../components/Books/BookList';
 import * as BooksApiService from '../services/BooksApiService';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Search = () => {
     const [books, setBooks] = useState([]);
@@ -40,7 +41,7 @@ const Search = () => {
 
     return (<div className="search-books">
         <div className="search-books-bar">
-            <button className="close-search">Close</button>
+            <Link to='/'><button className="close-search">Close</button></Link>
             <div className="search-books-input-wrapper">
                 <input type="text" placeholder="Search by title or author" value={query} onChange={onSearchBoxChange} />
             </div>
