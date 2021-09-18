@@ -13,8 +13,10 @@ import BookShelfItem from './BookShelfItem';
  *                  id:number,
  *                  title:string,
  *                  author:string,
- *                  url:string
- *             }]
+ *                  url:string,
+ *                  bookShelfId:string
+ *             }],
+ *             updateBookShelf:function(book, string)
  *          }]
  *       }} props 
  * @returns {JSX.Element}
@@ -23,7 +25,10 @@ const BookShelfList = props => {
     const list = props.list;
     return (
         <div className="list-books-content">
-            {list.map(item => <BookShelfItem key={item.bookShelf.id} bookShelf={item.bookShelf} books={item.books} />)}
+            {list.map(item => <BookShelfItem key={item.bookShelf.id}
+                bookShelf={item.bookShelf}
+                books={item.books}
+                updateBookShelf={props.updateBookShelf} />)}
         </div>
     );
 };

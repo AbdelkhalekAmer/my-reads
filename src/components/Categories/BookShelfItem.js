@@ -11,8 +11,10 @@ import BookList from '../Books/BookList';
  *             id:number,
  *             title:string,
  *             author:string,
- *             url:string
- *          }]
+ *             url:string,
+ *             bookShelfId:string
+ *          }],
+ *          updateBookShelf:function(book, string)
  *        }} props 
  * @returns {JSX.Element}
  */
@@ -22,7 +24,7 @@ const BookShelfItem = props => {
     return (<div className="bookshelf">
         <h2 className="bookshelf-title">{bookShelf.title}</h2>
         <div className="bookshelf-books">
-            <BookList books={books} />
+            <BookList books={books} updateBookShelf={props.updateBookShelf} />
         </div>
     </div>);
 };

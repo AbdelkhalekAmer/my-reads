@@ -2,7 +2,7 @@ import './BookOptionsMenu.css';
 
 const BookOptionsMenu = props => {
     return (<div className="book-shelf-changer">
-        <select>
+        <select onChange={props.onChangeBookShelf} value={props.bookShelfId}>
             <option value="move" disabled>Move to...</option>
             <option value="currentlyReading">Currently Reading</option>
             <option value="wantToRead">Want to Read</option>

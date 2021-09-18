@@ -1,9 +1,11 @@
 import './App.css';
 import Main from './pages/Main';
+import Search from './pages/Search';
 
 const App = () => (
   <div>
-    <Main />
+    {/* <Main /> */}
+    <Search />
   </div>
 );
 
