@@ -4,38 +4,45 @@ import * as BooksApiService from '../services/BooksApiService';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const Search = () => {
+const Search = ({ shelvedBooks, appLoading }) => {
     const [books, setBooks] = useState([]);
     const [query, setQuery] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(appLoading);
 
     useEffect(() => {
-        setLoading(true);
-        BooksApiService.search(query)
-            .then(mapBooks)
-            .then(setBooks)
-            .then(() => setLoading(false))
-    }, [query]);
-
-    const updateBookShelf = (book, bookShelfId) => {
-        setLoading(true);
-        console.log(book, bookShelfId);
-        BooksApiService.update(book, bookShelfId).then(response => {
+        if (query) {
+            setLoading(true);
             BooksApiService.search(query)
                 .then(mapBooks)
                 .then(setBooks)
                 .then(() => setLoading(false));
+        }
+    }, [query]);
+
+    const updateBookShelf = (book, bookShelfId) => {
+        setBooks(prevBooks => {
+            const newBooks = [...prevBooks];
+            newBooks[newBooks.indexOf(book)].bookShelfId = bookShelfId;
+            return newBooks;
         });
+        BooksApiService.update(book, bookShelfId);
     };
 
-    const mapBooks = books => books && books.length ? books.map(book => ({
-        id: book.id,
-        title: book.title,
-        author: book.authors && book.authors.length ? book.authors[0] : '',
-        url: book.imageLinks ? book.imageLinks.smallThumbnail : '',
-        bookShelfId: book.shelf || 'none'
-    })
-    ) : [];
+    const mapBooks = books => {
+        return books && books.length ? books.map(book => ({
+            id: book.id,
+            title: book.title,
+            author: book.authors && book.authors.length ? book.authors.join(', ') : '',
+            url: book.imageLinks ? book.imageLinks.smallThumbnail : '',
+            bookShelfId: getBookShelfId(book.id)
+        })
+        ) : [];
+    };
+
+    const getBookShelfId = id => {
+        const book = shelvedBooks.find(shelvedBook => shelvedBook.id === id);
+        return book ? book.bookShelfId : 'none';
+    };
 
     const onSearchBoxChange = event => setQuery(event.target.value || '');
 
@@ -52,4 +59,4 @@ const Search = () => {
     </div>);
 };
 
-export default Search
+export default Search;

@@ -16,16 +16,12 @@ import BookOptionsMenu from '../UI/BookOptionsMenu';
  */
 const BookItem = props => {
     const book = props.book;
-    const updateBookShelf = event => {
-        const bookShelfId = event.target.value;
-        if (bookShelfId !== book.bookShelfId && bookShelfId !== 'none') props.updateBookShelf(book, bookShelfId);
-    };
     return (
         <li>
             <div className="book">
                 <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${book.url}")` }}></div>
-                    <BookOptionsMenu onChangeBookShelf={updateBookShelf} bookShelfId={book.bookShelfId} />
+                    <BookOptionsMenu updateBookShelf={props.updateBookShelf} book={book} />
                 </div>
                 <div className="book-title">{book.title}</div>
                 <div className="book-authors">{book.author}</div>

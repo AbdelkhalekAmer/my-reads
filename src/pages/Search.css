@@ -44,3 +44,8 @@
   .search-books-results {
     padding: 80px 10px 20px;
   }
+
+  .error{
+    color: salmon;
+    border: 1px dashed red;
+  }
