@@ -15,16 +15,18 @@ const App = () => {
   }, []);
 
   const updateBookShelf = (book, bookShelfId) => {
-    setMyReads(prevMyReads => {
-      const newMyReads = [...prevMyReads];
-      const newBookShelf = newMyReads.find(shelf => shelf.books.indexOf(book) > -1);
-      if (!newBookShelf) return newMyReads;
-      newBookShelf.books.splice(newBookShelf.books.indexOf(book), 1);
-      book.bookShelfId = bookShelfId;
-      if (bookShelfId !== 'none') newMyReads.find(shelf => shelf.bookShelf.id === bookShelfId).books.push(book);
-      return newMyReads;
-    });
-    BooksApiService.update(book, bookShelfId);
+    if (book.bookShelfId !== bookShelfId) {
+      setMyReads(prevMyReads => {
+        const newMyReads = [...prevMyReads];
+        const bookShelf = newMyReads.find(shelf => shelf.books.indexOf(book) > -1);
+        if (bookShelf && bookShelf.books.indexOf(book)) bookShelf.books.splice(bookShelf.books.indexOf(book), 1);
+        book.bookShelfId = bookShelfId;
+        const newBookShelf = newMyReads.find(shelf => shelf.bookShelf.id === bookShelfId);
+        if (newBookShelf && newBookShelf.id !== 'none') newBookShelf.books.push(book);
+        return newMyReads;
+      });
+      BooksApiService.update(book, bookShelfId);
+    }
   };
 
   const getMyReads = () => BooksApiService.getAll().then(sortBooks).then(setMyReads).then(() => setLoading(false));
@@ -62,7 +64,7 @@ const App = () => {
   }
   return (<Switch>
     <Route exact path='/' render={() => <Main myReads={myReads} updateBookShelf={updateBookShelf} appLoading={loading} />} />
-    <Route exact path='/search' render={() => <Search shelvedBooks={myReads.map(shelf => shelf.books).flat()} appLoading={loading} />} />
+    <Route exact path='/search' render={() => <Search shelvedBooks={myReads.map(shelf => shelf.books).flat()} updateBookShelf={updateBookShelf} appLoading={loading} />} />
   </Switch>
   )
 };

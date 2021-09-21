@@ -4,7 +4,7 @@ import * as BooksApiService from '../services/BooksApiService';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const Search = ({ shelvedBooks, appLoading }) => {
+const Search = ({ shelvedBooks, updateBookShelf, appLoading }) => {
     const [books, setBooks] = useState([]);
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(appLoading);
@@ -18,15 +18,6 @@ const Search = ({ shelvedBooks, appLoading }) => {
                 .then(() => setLoading(false));
         }
     }, [query]);
-
-    const updateBookShelf = (book, bookShelfId) => {
-        setBooks(prevBooks => {
-            const newBooks = [...prevBooks];
-            newBooks[newBooks.indexOf(book)].bookShelfId = bookShelfId;
-            return newBooks;
-        });
-        BooksApiService.update(book, bookShelfId);
-    };
 
     const mapBooks = books => {
         return books && books.length ? books.map(book => ({
