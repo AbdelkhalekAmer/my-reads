@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useEffect } from 'react'
-import * as BooksApiService from './Services/BooksApiService';
+import * as BooksApiService from './services/BooksApiService';
 import Main from './pages/Main';
 import Search from './pages/Search';
 import { Route, Switch } from "react-router-dom";
