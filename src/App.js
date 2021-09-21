@@ -40,8 +40,11 @@ const App = () => {
     if (book.bookShelfId !== bookShelfId) {
       setMyReads(prevMyReads => {
         const newMyReads = [...prevMyReads];
-        const bookShelf = newMyReads.find(shelf => shelf.books.indexOf(book) > -1);
-        if (bookShelf && bookShelf.books.indexOf(book) > -1) bookShelf.books.splice(bookShelf.books.indexOf(book), 1);
+        const bookShelf = newMyReads.find(shelf => shelf.books.find(bookInShelf => bookInShelf.id.toLowerCase() === book.id.toLowerCase()) || false);
+        if (bookShelf) {
+          const bookToBeDeleted = bookShelf.books.find(bookInShelf => bookInShelf.id.toLowerCase() === book.id.toLowerCase());
+          if (bookShelf.books.indexOf(bookToBeDeleted) > -1) bookShelf.books.splice(bookShelf.books.indexOf(bookToBeDeleted), 1);
+        }
         book.bookShelfId = bookShelfId;
         const newBookShelf = newMyReads.find(shelf => shelf.bookShelf.id === bookShelfId);
         if (newBookShelf && newBookShelf.id !== 'none') newBookShelf.books.push(book);
