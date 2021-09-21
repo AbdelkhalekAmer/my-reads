@@ -1,6 +1,6 @@
 import './Search.css';
 import BookList from '../components/Books/BookList';
-import * as BooksApiService from '../Services/BooksApiService';
+import * as BooksApiService from '../services/BooksApiService';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
