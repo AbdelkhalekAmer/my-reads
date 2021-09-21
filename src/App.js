@@ -1,9 +1,10 @@
 import './App.css';
 import { useState, useEffect } from 'react'
-import * as BooksApiService from './services/BooksApiService';
+import * as BooksApiService from './Services/BooksApiService';
 import Main from './pages/Main';
 import Search from './pages/Search';
 import { Route, Switch } from "react-router-dom";
+import BOOK_SHELF_TYPE from './Constants/BOOK_SHELF_TYPE';
 
 const App = () => {
   const [myReads, setMyReads] = useState([]);
@@ -11,7 +12,28 @@ const App = () => {
 
   useEffect(() => {
     setLoading(true);
-    getMyReads();
+    BooksApiService.getAll()
+      .then(books => {
+        const bookShelves = books.map(book => book.shelf)
+          .filter((value, index, self) => self.indexOf(value) === index)
+          .map(bookShelf => ({
+            id: bookShelf,
+            title: BOOK_SHELF_TYPE[bookShelf]
+          }));
+        const sortedBooks = bookShelves.map(bookShelf => ({
+          bookShelf,
+          books: books.filter(book => book.shelf === bookShelf.id).map(book => ({
+            id: book.id,
+            title: book.title,
+            author: book.authors && book.authors.length ? book.authors.join(', ') : '',
+            url: book.imageLinks ? book.imageLinks.smallThumbnail : '',
+            bookShelfId: bookShelf.id
+          }))
+        }));
+        return sortedBooks;
+      })
+      .then(setMyReads)
+      .then(() => setLoading(false));
   }, []);
 
   const updateBookShelf = (book, bookShelfId) => {
@@ -19,7 +41,7 @@ const App = () => {
       setMyReads(prevMyReads => {
         const newMyReads = [...prevMyReads];
         const bookShelf = newMyReads.find(shelf => shelf.books.indexOf(book) > -1);
-        if (bookShelf && bookShelf.books.indexOf(book)) bookShelf.books.splice(bookShelf.books.indexOf(book), 1);
+        if (bookShelf && bookShelf.books.indexOf(book) > -1) bookShelf.books.splice(bookShelf.books.indexOf(book), 1);
         book.bookShelfId = bookShelfId;
         const newBookShelf = newMyReads.find(shelf => shelf.bookShelf.id === bookShelfId);
         if (newBookShelf && newBookShelf.id !== 'none') newBookShelf.books.push(book);
@@ -29,39 +51,6 @@ const App = () => {
     }
   };
 
-  const getMyReads = () => BooksApiService.getAll().then(sortBooks).then(setMyReads).then(() => setLoading(false));
-
-  const sortBooks = books => {
-    const bookShelves = books.map(book => book.shelf)
-      .filter((value, index, self) => self.indexOf(value) === index)
-      .map(bookShelf => ({
-        id: bookShelf,
-        title: getBookShelfTitle(bookShelf)
-      }));
-    const sortedBooks = bookShelves.map(bookShelf => ({
-      bookShelf,
-      books: books.filter(book => book.shelf === bookShelf.id).map(book => ({
-        id: book.id,
-        title: book.title,
-        author: book.authors && book.authors.length ? book.authors.join(', ') : '',
-        url: book.imageLinks ? book.imageLinks.smallThumbnail : '',
-        bookShelfId: bookShelf.id
-      }))
-    }));
-    return sortedBooks;
-  };
-
-  const getBookShelfTitle = id => {
-    switch (id) {
-      case 'currentlyReading':
-        return 'Currently Reading';
-      case 'wantToRead':
-        return 'Want To Read';
-      case 'read':
-        return 'Read';
-      default: throw Error('Not supported book shelf type.')
-    }
-  }
   return (<Switch>
     <Route exact path='/' render={() => <Main myReads={myReads} updateBookShelf={updateBookShelf} appLoading={loading} />} />
     <Route exact path='/search' render={() => <Search shelvedBooks={myReads.map(shelf => shelf.books).flat()} updateBookShelf={updateBookShelf} appLoading={loading} />} />

@@ -1,3 +1,4 @@
+import BOOK_SHELF_TYPE from '../../Constants/BOOK_SHELF_TYPE';
 import './BookOptionsMenu.css';
 
 /**
@@ -13,18 +14,18 @@ import './BookOptionsMenu.css';
  *        }} props 
  * @returns {JSX.Element}
  */
-const BookOptionsMenu = props => {
+const BookOptionsMenu = ({ book, updateBookShelf }) => {
     const onChangeBookShelf = event => {
         const bookShelfId = event.target.value;
-        if (props.book.bookShelfId !== bookShelfId) props.updateBookShelf(props.book, bookShelfId);
+        if (bookShelfId) updateBookShelf(book, bookShelfId);
     };
     return (<div className="book-shelf-changer">
-        <select onChange={onChangeBookShelf} value={props.book.bookShelfId}>
+        <select onChange={onChangeBookShelf} value={book.bookShelfId}>
             <option value="move" disabled>Move to...</option>
-            <option value="currentlyReading">Currently Reading</option>
-            <option value="wantToRead">Want to Read</option>
-            <option value="read">Read</option>
-            <option value="none">None</option>
+            <option value="currentlyReading">{BOOK_SHELF_TYPE.currentlyReading}</option>
+            <option value="wantToRead">{BOOK_SHELF_TYPE.wantToRead}</option>
+            <option value="read">{BOOK_SHELF_TYPE.read}</option>
+            <option value="none">{BOOK_SHELF_TYPE.none}</option>
         </select>
     </div>);
 }

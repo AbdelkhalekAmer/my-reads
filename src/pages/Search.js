@@ -1,6 +1,6 @@
 import './Search.css';
 import BookList from '../components/Books/BookList';
-import * as BooksApiService from '../services/BooksApiService';
+import * as BooksApiService from '../Services/BooksApiService';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -13,22 +13,20 @@ const Search = ({ shelvedBooks, updateBookShelf, appLoading }) => {
         if (query) {
             setLoading(true);
             BooksApiService.search(query)
-                .then(mapBooks)
+                .then(books => {
+                    return books && books.length ? books.map(book => ({
+                        id: book.id,
+                        title: book.title,
+                        author: book.authors && book.authors.length ? book.authors.join(', ') : '',
+                        url: book.imageLinks ? book.imageLinks.smallThumbnail : '',
+                        bookShelfId: getBookShelfId(book.id)
+                    })
+                    ) : [];
+                })
                 .then(setBooks)
                 .then(() => setLoading(false));
         }
     }, [query]);
-
-    const mapBooks = books => {
-        return books && books.length ? books.map(book => ({
-            id: book.id,
-            title: book.title,
-            author: book.authors && book.authors.length ? book.authors.join(', ') : '',
-            url: book.imageLinks ? book.imageLinks.smallThumbnail : '',
-            bookShelfId: getBookShelfId(book.id)
-        })
-        ) : [];
-    };
 
     const getBookShelfId = id => {
         const book = shelvedBooks.find(shelvedBook => shelvedBook.id === id);

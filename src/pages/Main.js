@@ -1,5 +1,5 @@
 import './Main.css';
-import BookShelfList from '../components/Categories/BookShelfList';
+import BookShelfList from '../components/BookShelf/BookShelfList';
 import { Link } from 'react-router-dom';
 
 const Main = ({ myReads, updateBookShelf, appLoading }) => {
