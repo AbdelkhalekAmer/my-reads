@@ -26,6 +26,9 @@ const Search = ({ shelvedBooks, updateBookShelf, appLoading }) => {
                 .then(setBooks)
                 .then(() => setLoading(false));
         }
+        else {
+            setBooks([]);
+        }
     }, [query]);
 
     const getBookShelfId = id => {

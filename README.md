@@ -1,8 +1,17 @@
+# I used udacity starter template for my-reads project.
+
+# Note:
+Application stores books in different shelves and you can change book from shelf to another shelf.
+you can also search for more books through '/search' page and also you can add books from search directly to your book shelf.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
+
+First please run: `npm install` then `npm start`.
 
 In the project directory, you can run:
 
